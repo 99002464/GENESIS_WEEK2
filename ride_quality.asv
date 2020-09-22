@@ -7,9 +7,9 @@
 %    @PS no. : 99002591
 
 %% Import the data
-[acc] = xlsread('D:\Matlab\Genesis-Matlab\database\log.csv','G2:I4457');
-[gvt] = xlsread('D:\Matlab\Genesis-Matlab\database\log.csv','D2:F4457');
-[tim] = xlsread('D:\Matlab\Genesis-Matlab\database\log.csv','AD2:AD4457');
+[acc] = xlsread('D:\Matlab\Genesis-Matlab\database\log.csv','G2:I100');
+[gvt] = xlsread('D:\Matlab\Genesis-Matlab\database\log.csv','D2:F100');
+[tim] = xlsread('D:\Matlab\Genesis-Matlab\database\log.csv','AD2:AD100');
 raw = [acc,gvt,tim];
 
 %% Create output variable
@@ -41,7 +41,7 @@ gy = ride_data.GVTy;
 gz = ride_data.GVTz;
 %Time 
 t = ride_data.TIM;
-iteration = 4455;
+iteration = 98;
 %% Linear acceleration data analysis
 %Change in acceleration every 0.1s on each axis
 for i = 1:iteration
@@ -97,6 +97,6 @@ title('RATE OF CHANGE OF PERCIEVED GRAVITY');
 %% Sensor Fusion
 % Custom funtion 
 
-final_data = sensor_fusion(acc_change, gvt_change);
+sensor_fusion(acc_change, gvt_change);
 subplot(3,1,3);
-plot(final_data);
+plot(
