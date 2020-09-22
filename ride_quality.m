@@ -40,8 +40,25 @@ gx = ride_data.GVTx;
 gy = ride_data.GVTy;
 gz = ride_data.GVTz;
 %Time 
-t = ride_data.TIM;
+t_temp = ride_data.TIM;
 iteration = 4455;
+
+%% Time Normalization
+for i = 1:iteration
+    t(i,:) = t_temp(i+1,1) - t_temp(i,1);
+end
+
+t_real(1,1) = 0;
+for i = 1:iteration
+    t_real(i+1,:) = t_real(i,:) + t(i,:);
+end
+%Time elapsed in seconds
+t_real = t_real.*0.001;
+
+%Clear no longer required variables
+clearvars t_temp;
+clearvars t;
+
 %% Linear acceleration data analysis
 %Change in acceleration every 0.1s on each axis
 for i = 1:iteration
@@ -90,13 +107,40 @@ gvt_change = sum(gxt.^2 + gyt.^2 + gzt.^2, 2);
 %Plot overall gravity changes throughout journey
 subplot(3,1,2);
 plot(gvt_change);
-xlabel('Time in secs');
+xlabel('Time');
 ylabel('Gravity in m/s^2');
 title('RATE OF CHANGE OF PERCIEVED GRAVITY');
 
 %% Sensor Fusion
-% Custom funtion 
 
+%Use of custom function : sensor_fusion(arg1,arg2S)
 final_data = sensor_fusion(acc_change, gvt_change);
 subplot(3,1,3);
 plot(final_data);
+xlabel('Time');
+ylabel('Jerks');
+title('ABRUPT MOTION ON THE ROAD');
+
+%% Clear no longer required variables
+clearvars gx gy gx;
+clearvars gxt gyt gzt;
+
+%% Accessing ride quality
+jerk = 0;
+smooth = 0;
+threshold = 0.1;
+for i = 1: iteration
+    if final_data(i,:) > threshold
+        jerk = jerk + 1;
+    else
+        smooth = smooth + 1;
+    end
+end
+
+total_counter = jerk+smooth;
+percent_good_ride = (smooth/total_counter)*100;
+percent_bad_ride = (jerk/total_counter)*100;
+percent_bad_ride = round(percent_bad_ride);
+DISPLAY = sprintf('%d percent of the total ride was bad', percent_bad_ride);
+disp(DISPLAY);
+
