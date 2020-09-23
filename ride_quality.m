@@ -7,9 +7,9 @@
 %    @PS no. : 99002591
 
 %% Import the data
-[acc] = xlsread('D:\Matlab\Genesis-Matlab\database\log.csv','G2:I4457');
-[gvt] = xlsread('D:\Matlab\Genesis-Matlab\database\log.csv','D2:F4457');
-[tim] = xlsread('D:\Matlab\Genesis-Matlab\database\log.csv','AD2:AD4457');
+[acc] = xlsread('D:\MatlabProjects\Genesis-Matlab\database\log.csv','G2:I4457');
+[gvt] = xlsread('D:\MatlabProjects\Genesis-Matlab\database\log.csv','D2:F4457');
+[tim] = xlsread('D:\MatlabProjects\Genesis-Matlab\database\log.csv','AD2:AD4457');
 raw = [acc,gvt,tim];
 
 %% Create output variable
@@ -28,7 +28,7 @@ ride_data.GVTz = data(:,6);
 ride_data.TIM = data(:,7);
 
 %% Clear temporary variables
-clearvars data raw acc gvt tim;
+clearvars raw acc gvt tim;
 
 %% Assign independent variables for all the sensors
 %Linear Acceleration on all three axes
@@ -143,4 +143,12 @@ percent_bad_ride = (jerk/total_counter)*100;
 percent_bad_ride = round(percent_bad_ride);
 DISPLAY = sprintf('%d percent of the total ride was bad', percent_bad_ride);
 disp(DISPLAY);
+
+%% Putting together all data
+for i = i:size(final_data)
+    null_matrix(i,:) = 0000;
+end
+alldata = horzcat(data(2:end,1),data(2:end,2),data(2:end,3),data(2:end,4),data(2:end,5),data(2:end,6),data(2:end,7),null_matrix, acc_change,gvt_change,final_data);
+
+csvwrite('ALL_DATA_LOGS.csv', alldata);
 
