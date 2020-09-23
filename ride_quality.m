@@ -150,5 +150,6 @@ for i = i:size(final_data)
 end
 alldata = horzcat(data(2:end,1),data(2:end,2),data(2:end,3),data(2:end,4),data(2:end,5),data(2:end,6),data(2:end,7),null_matrix, acc_change,gvt_change,final_data);
 
+%% Write all the data to a csv file named "ALL_DATA_LOGS"
 csvwrite('ALL_DATA_LOGS.csv', alldata);
 
